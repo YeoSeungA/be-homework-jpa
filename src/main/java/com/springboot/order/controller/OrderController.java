@@ -1,8 +1,10 @@
 package com.springboot.order.controller;
 
 import com.springboot.coffee.service.CoffeeService;
+import com.springboot.exception.ExceptionCode;
 import com.springboot.order.dto.OrderPatchDto;
 import com.springboot.order.dto.OrderPostDto;
+import com.springboot.order.dto.OrderResponseDto;
 import com.springboot.order.entity.Order;
 import com.springboot.order.mapper.OrderMapper;
 import com.springboot.order.service.OrderService;
@@ -13,10 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -58,8 +62,9 @@ public class OrderController {
         Order order = orderService.findOrder(orderId);
 
         // TODO JPA 기능에 맞춰서 회원이 주문한 커피 정보를 ResponseEntity에 포함 시키세요.
+        OrderResponseDto responseDto = mapper.orderToOrderResponseDto (order);
 
-        return new ResponseEntity<>(null);
+        return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 
     @GetMapping
