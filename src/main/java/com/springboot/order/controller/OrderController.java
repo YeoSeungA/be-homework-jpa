@@ -8,6 +8,8 @@ import com.springboot.order.dto.OrderResponseDto;
 import com.springboot.order.entity.Order;
 import com.springboot.order.mapper.OrderMapper;
 import com.springboot.order.service.OrderService;
+import com.springboot.response.MultiResponseDto;
+import com.springboot.response.SingleResponseDto;
 import com.springboot.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -62,9 +64,9 @@ public class OrderController {
         Order order = orderService.findOrder(orderId);
 
         // TODO JPA 기능에 맞춰서 회원이 주문한 커피 정보를 ResponseEntity에 포함 시키세요.
-        OrderResponseDto responseDto = mapper.orderToOrderResponseDto (order);
+        OrderResponseDto responseDto = mapper.orderToOrderResponseDto(order);
 
-        return new ResponseEntity<>(responseDto,HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(responseDto),HttpStatus.OK);
     }
 
     @GetMapping
@@ -74,8 +76,9 @@ public class OrderController {
         List<Order> orders = pageOrders.getContent();
 
         // TODO JPA 기능에 맞춰서 회원이 주문한 커피 정보 목록을 ResponseEntity에 포함 시키세요.
+        List<OrderResponseDto> responseDtos = mapper.ordersToOrderResponseDtos(orders);
 
-        return new ResponseEntity<>(null);
+        return new ResponseEntity<>(new MultiResponseDto<>(responseDtos,pageOrders),HttpStatus.OK);
     }
 
     @DeleteMapping("/{order-id}")

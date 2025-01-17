@@ -17,7 +17,7 @@ public class Stamp {
     private long stampId;
 
     @Column(nullable = false)
-    private int stampCount;
+    private int stampCount = 0;
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

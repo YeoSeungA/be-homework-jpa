@@ -35,17 +35,17 @@ public class OrderService {
 
     public Order createOrder(Order order) {
         // 회원이 존재하는지 확인
-        memberService.findVerifiedMember(order.getMember().getMemberId());
+        Member findMember = memberService.findVerifiedMember(order.getMember().getMemberId());
 
-        // TODO 커피가 존재하는지 조회하는 로직이 포함되어야 합니다.
-        //    존재하는 커피인지 확인하자.
         order.getOrderCoffees().stream()
                 .forEach(orderCoffee -> coffeeService.findVerifiedCoffee(orderCoffee.getCoffee().getCoffeeId()));
 
+//        기존의 stamp 갯수
+        int originalStampCount = findMember.getStamp ().getStampCount ();
 //        기존의 stamp 갯수에서 addStampCount를 더하자
-        int totalStamp = order.getMember().getStamp().getStampCount() + addStampCount(order);
-//        set을 통해 Member의 stampCount를 반영하자.
-        order.getMember().getStamp().setStampCount(totalStamp);
+        int totalStamp = originalStampCount + addStampCount(order);
+////        set을 통해 Member의 stampCount를 반영하자.
+        findMember.getStamp().setStampCount(totalStamp);
 
         return orderRepository.save(order);
     }
